@@ -46,7 +46,14 @@ function toast(message,type="success"){
   requestAnimationFrame(()=>item.classList.add("show"));setTimeout(()=>{item.classList.remove("show");setTimeout(()=>item.remove(),250)},3000)
 }
 function currentPreferences(){const m=user?.user_metadata||{};return {display_name:m.display_name||user?.email?.split("@")[0]||"Usuário",week_start:m.week_start||"sunday",theme:m.theme||"dark",default_page:m.default_page||"dashboard"}}
-function applyPreferences(){appPrefs=currentPreferences();document.body.classList.toggle("theme-light",appPrefs.theme==="light");const name=appPrefs.display_name||"Usuário";if($("#sideUserName"))$("#sideUserName").textContent=name;if($("#sideUserEmail"))$("#sideUserEmail").textContent=user?.email||"";if($("#userAvatar"))$("#userAvatar").textContent=name.charAt(0).toUpperCase()}
+function applyTheme(theme="dark"){
+  document.body.classList.remove("theme-light","theme-kuromi");
+  if(theme==="light")document.body.classList.add("theme-light");
+  if(theme==="kuromi")document.body.classList.add("theme-kuromi");
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta){meta.setAttribute("content",theme==="light"?"#f3e7d5":theme==="kuromi"?"#211225":"#2b1b14")}
+}
+function applyPreferences(){appPrefs=currentPreferences();applyTheme(appPrefs.theme);const name=appPrefs.display_name||"Usuário";if($("#sideUserName"))$("#sideUserName").textContent=name;if($("#sideUserEmail"))$("#sideUserEmail").textContent=user?.email||"";if($("#userAvatar"))$("#userAvatar").textContent=name.charAt(0).toUpperCase()}
 function isStandalone(){return window.matchMedia?.("(display-mode: standalone)").matches||window.navigator.standalone===true}
 function updatePwaUi(){const title=$("#pwaStatusTitle"),text=$("#pwaStatusText"),btn=$("#installPwaBtn");if(!title||!text||!btn)return;if(isStandalone()){title.textContent="Frontier instalado";text.textContent="Você está usando o Frontier como aplicativo.";btn.textContent="Aplicativo instalado";btn.disabled=true;return}title.textContent="Instalar Frontier";text.textContent=deferredInstallPrompt?"Instalação disponível neste dispositivo.":"Você pode instalar o Frontier pelo navegador e abrir como um aplicativo.";btn.textContent="Instalar Frontier";btn.disabled=false}
 async function installPwa(){if(isStandalone()){toast("O Frontier já está instalado.");return}if(deferredInstallPrompt){deferredInstallPrompt.prompt();const choice=await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;updatePwaUi();if(choice?.outcome==="accepted")toast("Frontier instalado com sucesso.");return}toast("No menu do navegador, escolha ‘Instalar aplicativo’ ou ‘Adicionar à tela inicial’.","info")}
