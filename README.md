@@ -19,3 +19,4 @@ Visão Geral, Projetos/Viagens, Estudos, Veículos, Livros, Finanças, Agenda, N
 Mantenha seu `js/config.js` com a Project URL e a Publishable Key do Supabase. O Frontier nunca precisa de uma Secret Key no navegador.
 
 Para GitHub Pages, publique a raiz deste projeto. PWA exige HTTPS, e o GitHub Pages já fornece HTTPS.
+Atualização do tema Kuromi.
